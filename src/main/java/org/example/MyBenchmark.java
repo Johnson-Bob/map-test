@@ -58,7 +58,7 @@ public class MyBenchmark {
             String key = plan.keyList.get(i);
             blackhole.consume(checkedMap.computeIfAbsent(key, k -> plan.value));
         }
-        blackhole.consume(checkedMap.keySet().stream().collect(Collectors.toList()));
+        blackhole.consume(checkedMap.keySet());
     }
 
     @Benchmark
