@@ -11,30 +11,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @State(Scope.Benchmark)
 public class ExecutionPlan {
-    @Param({"100", "1000", "10000", "100000"})
+    @Param({"100000"})
     public int iteration;
     public int value = 0;
     public TreeMap<String, Integer> treeMap;
     public HashMap<String, Integer> hashMap;
-    public List<String> keyList;
+    public List<String> keyVariants;
+    public SecureRandom random;
 
     @Setup(Level.Invocation)
     public void iterationSetup() {
-        SecureRandom random = new SecureRandom();
+        random = new SecureRandom();
         treeMap = new TreeMap<>();
         hashMap = new HashMap<>();
 
-        List<String> keyVariants = Stream.generate(this::randomString)
+        keyVariants = Stream.generate(this::randomString)
             .distinct()
             .limit(10)
-            .collect(Collectors.toList());
-        keyList = IntStream.range(0, iteration)
-            .mapToObj(i -> keyVariants.get(random.nextInt(10)))
             .collect(Collectors.toList());
     }
 

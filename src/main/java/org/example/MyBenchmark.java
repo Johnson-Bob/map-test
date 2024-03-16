@@ -55,7 +55,8 @@ public class MyBenchmark {
     public void checkTreeMap(ExecutionPlan plan, Blackhole blackhole) {
         Map<String, Integer> checkedMap = plan.treeMap;
         for (int i = 0; i < plan.iteration; i++) {
-            String key = plan.keyList.get(i);
+            int index = plan.random.nextInt(10);
+            String key = plan.keyVariants.get(index);
             blackhole.consume(checkedMap.computeIfAbsent(key, k -> plan.value));
         }
         blackhole.consume(checkedMap.keySet().stream().collect(Collectors.toList()));
@@ -70,7 +71,8 @@ public class MyBenchmark {
     public void checkHashMap(ExecutionPlan plan, Blackhole blackhole) {
         Map<String, Integer> checkedMap = plan.hashMap;
         for (int i = 0; i < plan.iteration; i++) {
-            String key = plan.keyList.get(i);
+            int index = plan.random.nextInt(10);
+            String key = plan.keyVariants.get(index);
             blackhole.consume(checkedMap.computeIfAbsent(key, k -> plan.value));
         }
         blackhole.consume(checkedMap.keySet().stream().sorted().collect(Collectors.toList()));
