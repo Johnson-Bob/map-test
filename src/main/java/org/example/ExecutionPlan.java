@@ -18,33 +18,40 @@ import java.util.stream.Stream;
 public class ExecutionPlan {
     @Param({"100", "1000", "10000", "100000"})
     public int iteration;
-    public int value = 0;
+    public int value;
     public TreeMap<String, Integer> treeMap;
     public HashMap<String, Integer> hashMap;
     public List<String> keyList;
+    private SecureRandom random;
+
+    @Setup(Level.Iteration)
+    public void iterationSetup() {
+        random = new SecureRandom();
+    }
 
     @Setup(Level.Invocation)
-    public void iterationSetup() {
-        SecureRandom random = new SecureRandom();
+    public void invocationSetup() {
         treeMap = new TreeMap<>();
         hashMap = new HashMap<>();
+        value = random.nextInt();
+        int uniqueKeysMaxNumber = iteration / 10;
 
         List<String> keyVariants = Stream.generate(this::randomString)
             .distinct()
-            .limit(10)
+            .limit(uniqueKeysMaxNumber)
             .collect(Collectors.toList());
         keyList = IntStream.range(0, iteration)
-            .mapToObj(i -> keyVariants.get(random.nextInt(10)))
+            .mapToObj(i -> keyVariants.get(random.nextInt(uniqueKeysMaxNumber)))
             .collect(Collectors.toList());
     }
 
     private String randomString() {
-        int leftLimit = 97; // letter 'a'
-        int rightLimit = 122; // letter 'z'
-        int targetStringLength = 8;
-        SecureRandom random = new SecureRandom();
+        int leftLimit = 'A';
+        int rightLimit = 'z';
+        int targetStringLength = random.nextInt(15) + 1;
 
         return random.ints(leftLimit, rightLimit + 1)
+            .filter(c -> c <= 'Z' || c >= 'a')
             .limit(targetStringLength)
             .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
             .toString();
