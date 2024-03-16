@@ -36,12 +36,13 @@ public class ExecutionPlan {
     }
 
     private String randomString() {
-        int leftLimit = 97; // letter 'a'
-        int rightLimit = 122; // letter 'z'
+        int leftLimit = 'A';
+        int rightLimit = 'z';
         int targetStringLength = 8;
         SecureRandom random = new SecureRandom();
 
         return random.ints(leftLimit, rightLimit + 1)
+            .filter(l -> l <= 'Z' || l >='a')
             .limit(targetStringLength)
             .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
             .toString();
