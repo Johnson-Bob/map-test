@@ -52,12 +52,12 @@ public class MyBenchmark {
     @Warmup(time = 1)
     @OutputTimeUnit(TimeUnit.NANOSECONDS)
     @BenchmarkMode(Mode.AverageTime)
-    public void checkTreeMap(ExecutionPlan plan, Blackhole blackhole) {
+    public void insertSortingTreeMap(ExecutionPlan plan, Blackhole blackhole) {
         Map<String, Integer> checkedMap = plan.treeMap;
         for (int i = 0; i < plan.iteration; i++) {
             blackhole.consume(checkedMap.put(plan.keyList.get(i), plan.value));
         }
-        blackhole.consume(checkedMap.keySet().stream().collect(Collectors.toList()));
+        blackhole.consume(checkedMap.keySet());
     }
 
     @Benchmark
@@ -66,7 +66,7 @@ public class MyBenchmark {
     @Warmup(time = 1)
     @OutputTimeUnit(TimeUnit.NANOSECONDS)
     @BenchmarkMode(Mode.AverageTime)
-    public void checkHashMap(ExecutionPlan plan, Blackhole blackhole) {
+    public void insertSortingHashMap(ExecutionPlan plan, Blackhole blackhole) {
         Map<String, Integer> checkedMap = plan.hashMap;
         for (int i = 0; i < plan.iteration; i++) {
             blackhole.consume(checkedMap.put(plan.keyList.get(i), plan.value));
