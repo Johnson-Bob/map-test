@@ -35,6 +35,7 @@ public class ExecutionPlan {
         value = random.nextInt();
 
         keyList = Stream.generate(this::randomString)
+            .distinct()
             .limit(iteration)
             .collect(Collectors.toList());
     }
