@@ -57,7 +57,7 @@ public class MyBenchmark {
         for (int i = 0; i < plan.iteration; i++) {
             blackhole.consume(checkedMap.put(plan.keyList.get(i), plan.value));
         }
-        blackhole.consume(checkedMap.keySet().stream().collect(Collectors.toList()));
+        blackhole.consume(checkedMap.keySet());
     }
 
     @Benchmark
